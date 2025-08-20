@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ดูรายการจอง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-wsite-300 text-gray-800 font-sans">
+
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-auto th, .table-auto td {
+            text-align: center;
+        }
+    </style>
+
+<div class="content-container">
+    <!-- เมนูนำทาง -->
+    <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+        <div class="w-10 h-10 bg-gray-800 rounded-full mr-4"></div>
+        <div class="flex-grow text-center">
+            <a href="{% url 'home_admin' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+                    <a href="{% url 'booking_admin' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+                    <!-- <a href="{% url 'Check_field_status' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">สถานะสนาม</a> -->
+                    <a href="{% url 'manage_users' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">จัดการผู้ใช้</a>
+                    <a href="{% url 'admin_confirm' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ยืนยันการชำระเงิน</a>
+                    <a href="{% url 'logout' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>
+        </div>
+    </div>
+
+
+
+<!-- ส่วน ตารางจองรายการ -->
+<div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-green-600 text-2xl font-semibold mb-4">รายการจองทั้งหมด</h2>
+    <table class="w-full border border-green-600">
+        <thead>
+            <tr class="bg-green-600 text-white">
+                <th class="p-3 text-center">ชื่อผู้จอง</th>
+                <th class="p-3 text-center">สนาม</th>
+                <th class="p-3 text-center">วันที่</th>
+                <th class="p-3 text-center">เวลาเริ่มต้น</th>
+                <th class="p-3 text-center">เวลาเสร็จสิ้น</th>
+                <th class="p-3 text-center">จํานวนเงิน</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for books in booking %}
+            <tr class="border-t border-green-600">
+                <td class="p-3 text-center">{{ books.user.username }}</td>  <!-- แสดงชื่อผู้จอง -->
+                <td class="p-3 text-center">{{ books.field}}</td>  <!-- แสดงชื่อสนาม (ต้องการให้มี field.name ใน Field model) -->
+                <td class="p-3 text-center">{{ books.booking_date }}</td>
+                <td class="p-3 text-center">{{ books.start_time }}</td>  <!-- แสดงเวลาเริ่มต้น -->
+                <td class="p-3 text-center">{{ books.end_time }}</td> <!-- แสดงเวลาเสร็จสิ้น -->
+                <td class="p-3 text-center">{{ books.total_price }}</td> 
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center p-3">ไม่มีรายการจอง</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

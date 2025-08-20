@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ติดต่อเรา - ระบบจองสนามฟุตบอล</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        /* ภาพพื้นหลัง */
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* กล่องเนื้อหา */
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ตาราง */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #38a169;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #38a169;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <div class="content-container">
+        <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+            <div class="flex-grow text-center">
+                <a href="{% url 'profile_view' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ตั้งค่า</a>
+                <a href="{% url 'home' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+                <a href="{% url 'about' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">เกี่ยวกับสนาม</a>
+                <a href="{% url 'bookings' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+                <a href="{% url 'contact' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ติดต่อเรา</a>
+                <a href="{% url 'logout' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>  
+            </div>
+        </div>
+
+        
+        <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-green-600 text-2xl font-semibold mb-4">รายการจองทั้งหมด</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ผู้จอง</th>
+                        <th>สนาม</th>
+                        <th>วันที่</th>
+                        <th>เวลา</th>
+                        <!-- <th>สถานะ</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if bookings %}
+                        {% for book in bookings %}
+                        <tr>
+                            <td>{{ book.user}}</td>
+                            <td>{{ book.field }}</td>
+                            <td>{{ book.booking_date }}</td>
+                            <td>{{ book.start_time }} - {{book.end_time}}</td>
+                            <!-- <td>{{book.payment_status}}</td> -->
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4">ไม่มีข้อมูลการจอง</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

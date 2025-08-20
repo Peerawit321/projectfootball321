@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="th">   
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจองสนามฟุตบอล</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 1000px;
+            margin: auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .table-auto th,
+        .table-auto td {
+            text-align: center;
+        }
+        
+    </style>
+     
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+</head>
+
+<body data-user-id="{{ request.user.id }}" class="bg-gray-100 py-10 px-4">
+    <div class="content-container">
+        <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+            <div class="flex-grow text-center">
+                <a href="{% url 'profile_view' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ตั้งค่า</a>
+                <a href="{% url 'home' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+                <a href="{% url 'about' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">เกี่ยวกับสนาม</a>
+                <a href="{% url 'bookings' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+                <a href="{% url 'contact' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ติดต่อเรา</a>
+                <a href="{% url 'logout' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>  
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6"></h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {% for field in fields %}
+            <div class="bg-white shadow-lg rounded-lg p-4 text-center">
+                <img src="{{ field.image.url }}" alt="{{ field.field_name }}"
+                    class="w-full h-40 object-cover rounded-lg">
+                <h3 class="text-lg mt-3 font-semibold">{{ field.field_name }}</h3>
+                <p class="text-gray-600">Weekday: ฿{{ field.price_weekday }}</p>
+                <p class="text-gray-600">Weekend: ฿{{ field.price_weekend }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+ <!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+<!-- ปุ่มเปิด/ปิดปฏิทิน -->
+<div class="flex justify-center">
+    <button id="toggleCalendar" class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition">
+        <i class="fas fa-calendar-alt text-lg mr-2"></i> <span id="calendarButtonText">ดูปฏิทินการจองสนาม</span>
+    </button>
+</div>
+
+<!-- ปฏิทิน -->
+<div id="calendarContainer" class="bg-white shadow-lg rounded-lg p-6 mt-5 border border-green-500 hidden">
+    <h2 class="text-xl font-bold text-green-700 text-center mb-4">📅 ปฏิทินการจองสนาม</h2>
+    <div id="calendar"></div>
+</div>
+
+<h1 class="bg-red-100 text-red-700 border border-red-400 rounded-md px-6 py-4 text-center text-xl font-semibold shadow-md max-w-xl mx-auto mt-6">
+    ⚠ กรุณาจองสนามล่วงหน้าอย่างน้อย 30 นาที
+</h1>
+
+<!-- FullCalendar CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+         document.getElementById("bookFieldButton").addEventListener("click", function(event) {
+                let now = new Date(); // เวลาปัจจุบัน
+                let selectedTime = new Date(); // สมมติว่าผู้ใช้เลือกเวลา
+                selectedTime.setMinutes(selectedTime.getMinutes() + 20); // เปลี่ยนตรงนี้เป็นเวลาที่ผู้ใช้เลือกจริงๆ
+
+                let diffMinutes = Math.floor((selectedTime - now) / (1000 * 60)); // คำนวณความต่างเป็นนาที
+
+                if (diffMinutes < 30) {
+                    document.getElementById("bookingWarning").classList.remove("hidden"); // แสดงข้อความเตือน
+                    event.preventDefault(); // ป้องกันไม่ให้ส่งฟอร์ม
+                 } else {
+                     document.getElementById("bookingWarning").classList.add("hidden"); // ซ่อนข้อความเตือน
+                    }
+                });
+            });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggleCalendar");
+        const calendarContainer = document.getElementById("calendarContainer");
+        const calendarButtonText = document.getElementById("calendarButtonText");
+        let calendar;  // ตัวแปรเก็บข้อมูล FullCalendar
+
+        // 🚀 ปุ่มเปิด/ปิดปฏิทิน
+        toggleButton.addEventListener("click", function () {
+            if (calendarContainer.classList.contains("hidden")) {
+                calendarContainer.classList.remove("hidden");
+                calendarButtonText.textContent = "ซ่อนปฏิทินการจองสนาม";
+                if (!calendar) {
+                    loadCalendar();  // โหลดปฏิทินถ้ายังไม่ได้โหลด
+                }
+            } else {
+                calendarContainer.classList.add("hidden");
+                calendarButtonText.textContent = "ดูปฏิทินการจองสนาม";
+            }
+        });
+
+        function loadCalendar() {
+            let calendarEl = document.getElementById("calendar");
+            let today = new Date().toISOString().split("T")[0];
+
+            fetch("/api/bookings/")
+                .then(response => response.json())
+                .then(data => {
+                    console.log("✅ ข้อมูลจาก API:", data);
+
+                    let events = data.map(booking => ({
+                        title: `👤 ${booking.user} | 🏟 ${booking.field}`,
+                        start: `${booking.booking_date}T${booking.start_time}`,
+                        end: `${booking.booking_date}T${booking.end_time}`,
+                        backgroundColor: "#16a34a",  // สีเขียว
+                        borderColor: "#15803d",
+                        extendedProps: {
+                            user: booking.user,
+                            field: booking.field,
+                            start_time: booking.start_time,
+                            end_time: booking.end_time
+                        }
+                    }));
+
+                    // 🔹 สร้าง FullCalendar
+                    calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: "dayGridMonth",
+                        locale: "th",
+                        height: 600,
+                        validRange: { start: today },
+                        events: events,
+
+                        // 🚀 เมื่อคลิกที่รายการจอง แสดงรายละเอียด
+                        eventClick: function(info) {
+                            alert(`📅 รายละเอียดการจอง\n\n👤 ผู้จอง: ${info.event.extendedProps.user}\n🏟 สนาม: ${info.event.extendedProps.field}\n⏰ เวลา: ${info.event.extendedProps.start_time} - ${info.event.extendedProps.end_time}`);
+                        }
+                    });
+
+                    console.log("✅ FullCalendar ถูกโหลดแล้ว!");
+                    calendar.render();
+                })
+          .catch(error => console.error("❌ โหลดข้อมูลล้มเหลว:", error));
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const bookingDate = document.getElementById("id_booking_date");
+    const startTime = document.getElementById("id_start_time");
+    const endTime = document.getElementById("id_end_time");
+    const fieldSelect = document.getElementById("id_field");
+    const totalPriceField = document.getElementById("id_total_price");
+    const bookingForm = document.querySelector("form");
+
+    // 🚀 ดึง user_id จาก <body>
+    const userId = document.body.getAttribute("data-user-id");
+
+    let existingBookings = [];
+
+    // 🚀 ป้องกันการจองวันที่เป็นอดีต
+    const today = new Date().toISOString().split("T")[0];
+    bookingDate.setAttribute("min", today);
+
+    startTime.addEventListener("change", calculatePrice);
+    endTime.addEventListener("change", calculatePrice);
+
+    // 🚀 ดึงข้อมูลการจองจาก API
+    fetchBookings();
+
+    // 🚀 เช็คว่า user ถูกแบนอยู่หรือไม่
+    function isUserBanned() {
+        let banData = localStorage.getItem(`ban_${userId}`);
+        if (banData) {
+            let banEndTime = new Date(JSON.parse(banData).banEnd);
+            let now = new Date();
+            if (now < banEndTime) {
+                return true;  // ❌ ยังไม่ครบ 30 นาที
+            } else {
+                localStorage.removeItem(`ban_${userId}`);  // ✅ ปลดแบนอัตโนมัติ
+                return false;
+            }
+        }
+        return false;
+    }
+
+    // 🚀 ฟังก์ชันคำนวณราคา (ต้องกำหนดให้ทำงานได้)
+    function calculatePrice() {
+        // ต้องเพิ่มโค้ดคำนวณราคาตามช่วงเวลาที่เลือก
+        if (startTime.value && endTime.value) {
+            const start = new Date(`2000-01-01T${startTime.value}`);
+            const end = new Date(`2000-01-01T${endTime.value}`);
+            
+            // คำนวณจำนวนชั่วโมง
+            const diffHours = (end - start) / (1000 * 60 * 60);
+            
+            // สมมติว่าราคาต่อชั่วโมงเป็น 500 บาท
+            const hourlyRate = 500;
+            const price = diffHours * hourlyRate;
+            
+            totalPriceField.value = price.toFixed(2);
+        }
+    }
+
+    // 🚀 ฟังก์ชันดึงข้อมูลการจอง
+    // 🚀 ฟังก์ชันดึงข้อมูลการจอง
+    // 🚀 ฟังก์ชันดึงข้อมูลการจอง
+    function fetchBookings() {
+        fetch("/api/bookings/")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // ตรวจสอบรูปแบบข้อมูลและแสดงในคอนโซลเพื่อดีบัก
+                console.log("ข้อมูลการจองที่ได้รับ:", data);
+                
+                // แปลงข้อมูลให้อยู่ในรูปแบบที่เหมาะสม โดยมีการตรวจสอบค่า null/undefined
+                existingBookings = data.map(b => {
+                    // ตรวจสอบโครงสร้างข้อมูลที่ได้รับ
+                    const userId = b.user_id !== undefined ? b.user_id : (b.user || "unknown");
+                    const fieldId = b.field_id !== undefined ? b.field_id : (b.field || "unknown");
+                    
+                    return {
+                        booking_id: b.booking_id || "",
+                        user: userId ? userId.toString() : "unknown",
+                        field: fieldId ? fieldId.toString() : "unknown",
+                        field_name: b.field_name || fieldId.toString() || "unknown",
+                        booking_date: b.booking_date,
+                        start_time: new Date(`${b.booking_date}T${b.start_time}`),
+                        end_time: new Date(`${b.booking_date}T${b.end_time}`)
+                    };
+                });
+                
+                console.log("โหลดข้อมูลการจองเรียบร้อยแล้ว:", existingBookings.length, "รายการ");
+            })
+            .catch(error => {
+                console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลการจอง:", error);
+            });
+    }
+
+    // 🚀 ประมวลผลข้อมูลการจอง
+    function processBookings(bookings) {
+        existingBookings = bookings.map(b => ({
+            booking_id: b.booking_id,
+            user: b.user,
+            field: b.field,
+            booking_date: b.booking_date,
+            start_time: new Date(`${b.booking_date}T${b.start_time}`),
+            end_time: new Date(`${b.booking_date}T${b.end_time}`)
+        }));
+    }
+
+    // 🚀 ตรวจสอบเวลาซ้ำซ้อน
+    function checkTimeConflict(field, date, start, end) {
+        return existingBookings.some(booking => {
+            return (
+                booking.field === field &&
+                booking.booking_date === date &&
+                start < booking.end_time &&
+                end > booking.start_time
+            );
+        });
+    }
+
+    // 🚀 ตรวจสอบก่อนส่งฟอร์ม
+    bookingForm.addEventListener("submit", function (e) {
+        // ตรวจสอบว่าผู้ใช้ถูกแบนหรือไม่
+        if (isUserBanned()) {
+            e.preventDefault();
+            alert("⛔ คุณถูกแบนชั่วคราว กรุณาลองใหม่อีกครั้งในอีก 30 นาที");
+            return;
+        }
+
+        const selectedField = fieldSelect.options[fieldSelect.selectedIndex].text; // ดึงชื่อสนามแทนค่า ID
+        const selectedDate = bookingDate.value;
+        const selectedStart = new Date(`${selectedDate}T${startTime.value}`);
+        const selectedEnd = new Date(`${selectedDate}T${endTime.value}`);
+
+        // ตรวจสอบว่าเวลาเริ่มต้นต้องน้อยกว่าเวลาสิ้นสุด
+        if (selectedStart >= selectedEnd) {
+            e.preventDefault();
+            alert("❌ เวลาเริ่มต้นต้องน้อยกว่าเวลาสิ้นสุด");
+            return;
+        }
+
+        // ❌ ตรวจสอบว่าผู้ใช้จองซ้ำหรือไม่ (เฉพาะผู้ใช้ปัจจุบัน)
+        const userConflict = existingBookings.some(booking => {
+            return (
+                booking.user === userId &&
+                booking.field === selectedField &&
+                booking.booking_date === selectedDate &&
+                selectedStart < booking.end_time &&
+                selectedEnd > booking.start_time
+            );
+        });
+
+        if (userConflict) {
+            e.preventDefault();
+            alert("❌ คุณได้จองสนามนี้ในช่วงเวลานี้ไปแล้ว กรุณาเลือกวันหรือเวลาใหม่!");
+            return;
+        }
+
+        // ❌ ตรวจสอบว่าสนามมีการจองซ้ำซ้อนกับผู้ใช้คนอื่นหรือไม่
+        const otherConflict = existingBookings.some(booking => {
+            return (
+                booking.field === selectedField &&
+                booking.booking_date === selectedDate &&
+                selectedStart < booking.end_time &&
+                selectedEnd > booking.start_time
+            );
+        });
+
+        if (otherConflict) {
+            e.preventDefault();
+            alert("❌ สนามนี้มีการจองในช่วงเวลานี้แล้ว กรุณาเลือกเวลาอื่น!");
+            return;
+        }
+
+        // ถ้าไม่มีปัญหา ยืนยันการจอง
+        //e.preventDefault(); // ป้องกันการส่งฟอร์มจริง (ในตัวอย่างนี้)
+        
+        // ✅ ยืนยันการจอง (แต่ยังไม่ชำระเงิน)
+        alert("✅ การจองของคุณได้รับการยืนยัน! กรุณาชำระเงิน");
+
+        // 🚀 จำลองว่าผู้ใช้ไม่ชำระเงิน (สำหรับทดสอบ)
+         // 🚀 จำลองว่าผู้ใช้ไม่ชำระเงิน
+         setTimeout(() => {
+            let failedPayments = parseInt(localStorage.getItem(`failedPayments_${userId}`) || "0");
+
+            failedPayments++;  // เพิ่มจำนวนครั้งที่จองแล้วไม่จ่าย
+            localStorage.setItem(`failedPayments_${userId}`, failedPayments);
+
+            if (failedPayments >= 2) {
+                // 🚀 ถ้าเกิน 2 ครั้ง ให้แบน 30 นาที
+                let banEnd = new Date();
+                banEnd.setMinutes(banEnd.getMinutes() + 30);
+                localStorage.setItem(`ban_${userId}`, JSON.stringify({ banEnd }));
+
+                alert("⛔ คุณจองแล้วไม่ชำระเงินเกิน 2 ครั้ง! คุณถูกแบน 30 นาที");
+        }
+        }, 5000); // ให้เวลา 5 วินาทีในการจำลองการชำระเงิน (แก้เป็น Event จริงใน Backend ได้)
+    });
+});
+        
+    </script>
+
+        <form method="post"
+            class="space-y-6 p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto mt-10 border border-black"
+            action="{% url 'bookings' %}">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {{ form.as_p }}
+            </div>
+            <label for=""></label>
+            <button type="submit"
+                class="w-full py-3 bg-green-600 text-white rounded-full text-lg font-semibold hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                จองสนาม
+            </button>
+        </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            const startTime = document.getElementById("id_start_time");
+            const endTime = document.getElementById("id_end_time");
+            const totalPriceField = document.getElementById("id_total_price");
+
+            function calculatePrice() {
+                if (startTime.value && endTime.value) {
+                    let startHour = parseInt(startTime.value.split(":")[0]); 
+                    let endHour = parseInt(endTime.value.split(":")[0]);
+
+                    if (endHour > startHour) {
+                        let duration = endHour - startHour;
+                        let totalPrice = duration * 500;
+                        totalPriceField.value = totalPrice;
+                    } else {
+                        totalPriceField.value = 0;
+                    }
+                }
+            }
+
+            // เรียกฟังก์ชันเมื่อมีการเปลี่ยนค่า
+            startTime.addEventListener("change", calculatePrice);
+            endTime.addEventListener("change", calculatePrice);
+        });
+            function toggleBookingTable() {
+                const table = document.getElementById('bookingTable');
+                table.classList.toggle('hidden');
+            }
+
+            function confirmBooking() {
+                const fieldName = document.getElementById('field_name').value;
+                const date = document.getElementById('booking_date').value;
+                const time = document.getElementById('booking_time').value;
+
+                if (fieldName && date && time) {
+                    alert('การจองของคุณได้รับการยืนยันแล้ว!');
+                } else {
+                    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                }
+            }
+        </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ติดต่อเรา - ระบบจองสนามฟุตบอล</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        /* ภาพพื้นหลัง */
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* กล่องเนื้อหา */
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ปรับภาพในเนื้อหา */
+        .content-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+
+    <div class="content-container">
+        <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+            <div class="flex-grow text-center">
+                <a href="{% url 'profile_view' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ตั้งค่า</a>
+                <a href="{% url 'home' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+                <a href="{% url 'about' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">เกี่ยวกับสนาม</a>
+                <a href="{% url 'bookings' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+                <a href="{% url 'contact' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ติดต่อเรา</a>
+                <a href="{% url 'logout' %}"
+                    class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>  
+            </div>
+        </div>
+
+        <!-- เนื้อหาหลัก -->
+        <div class="container mx-auto mt-10 p-8 bg-green-50 rounded-xl shadow-lg border border-green-300">
+            <h2 class="text-green-800 text-3xl font-semibold mb-6">เกี่ยวกับระบบจองสนามฟุตบอล</h2>
+            <p class="mb-6 text-gray-700 text-lg">เราคือผู้ให้บริการระบบจองสนามฟุตบอลที่สะดวก รวดเร็ว และมีความน่าเชื่อถือ</p>
+        
+            <!-- ภาพประกอบ -->
+            <div class="content-image mb-6 shadow-lg rounded-xl overflow-hidden">
+                <a href="#" target="_blank">
+                    <img src="https://d136usn7jnoe61.cloudfront.net/magazine/articles/431/images/soccer-pro.jpg" alt="ภาพสนามฟุตบอล"
+                        class="w-full h-64 object-cover">
+                </a>
+            </div>
+        
+            <!-- รายละเอียดสนาม -->
+            <div class="field-details">
+                <h3 class="text-green-900 text-2xl font-semibold mb-4">รายละเอียดสนาม</h3>
+                <ul class="list-disc pl-5 space-y-2 text-gray-800">
+                    <li>ชื่อสนาม: <span class="font-medium">Jojo Soccer Field</span></li>
+                    <li>สถานที่ตั้ง: <span class="font-medium">ถนนสายอุบล-ตระการ ตำบลไร่น้อย อำเภอเมือง</span></li>
+                    <li>ประเภทสนาม: <span class="font-medium">สนามหญ้าเทียมมาตรฐานสากลจากประเทศฮอลแลนด์</span></li>
+                    <li>สิ่งอำนวยความสะดวก:
+                        <ul class="list-square pl-5 space-y-1">
+                            <li>ไฟส่องสว่างสำหรับการเล่นตอนกลางคืน</li>
+                            <li>ห้องอาบน้ำและล็อกเกอร์</li>
+                            <li>ที่จอดรถสะดวกสบาย</li>
+                            <li>ร้านอาหารและเครื่องดื่ม</li>
+                        </ul>
+                    </li>
+                    <li>วัน จันทร์-ศุกร์ เวลา 9.00 - 18.00 ราคา <span class="font-semibold text-green-700">500 บาทต่อชั่วโมง</span></li>
+                    <li>วัน จันทร์-ศุกร์ เวลา 18.00 - 23.00 ราคา <span class="font-semibold text-green-700">500 บาทต่อชั่วโมง</span></li>
+                    <li>วัน เสาร์-อาทิตย์ เวลา 9.00 - 23.00 ราคา <span class="font-semibold text-green-700">500 บาทต่อชั่วโมง</span></li>
+                    <li>เบอร์ติดต่อ: <span class="font-medium text-green-700">088-974-5239</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืนยันการชำระเงิน - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .table-auto th,
+        .table-auto td {
+            text-align: center;
+            padding: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 80px;
+            text-align: center;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-approve {
+            background-color: #16a34a;
+        }
+
+        .btn-approve:hover {
+            background-color: #15803d;
+        }
+
+        .btn-reject {
+            background-color: #dc2626;
+        }
+
+        .btn-reject:hover {
+            background-color: #b91c1c;
+        }
+
+        .status-pending {
+            background-color: #fbbf24;
+            color: black;
+            border-radius: 5px;
+            padding: 2px 6px;
+        }
+
+        .status-approved {
+            background-color: #22c55e;
+            border-radius: 5px;
+            padding: 2px 6px;
+        }
+
+        .status-rejected {
+            background-color: #ef4444;
+            border-radius: 5px;
+            padding: 2px 6px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="content-container">
+        <!-- เมนูนำทาง -->
+        <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+            <div class="flex-grow text-center">
+                <a href="{% url 'home_admin' %}"
+                    class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+                <a href="{% url 'booking_admin' %}"
+                    class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+                <!-- <a href="{% url 'Check_field_status' %}"
+                    class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">สถานะสนาม</a> -->
+                <a href="{% url 'manage_users' %}"
+                    class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">จัดการผู้ใช้</a>
+                <a href="{% url 'admin_confirm' %}"
+                    class="text-white mx-2 mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ยืนยันการชำระเงิน</a>
+                <a href="{% url 'logout' %}"
+                    class="text-white mx-2 mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>
+            </div>
+        </div>
+
+        <!-- ตารางแสดงรายการชำระเงิน -->
+        <div class="mb-6">
+            <h2 class="text-3xl font-bold text-center text-green-400 mb-4">💰 การยืนยันการชำระเงิน</h2>
+            <table class="table-auto border-collapse border border-gray-500 w-full text-sm">
+                <thead class="bg-gray-700 text-white">
+                    <tr>
+                        <th class="border border-gray-500">หมายเลขคำสั่งซื้อ</th>
+                        <th class="border border-gray-500">ชื่อผู้จอง</th>
+                        <th class="border border-gray-500">จำนวนเงินที่ชำระ</th>
+                        <th class="border border-gray-500">ช่องทางการชำระเงิน</th>
+                        <th class="border border-gray-500">สถานะ</th>
+                        <th class="border border-gray-500">สลิปการโอน</th>
+                        <th class="border border-gray-500">การดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr class="bg-gray-800 text-white hover:bg-gray-700">
+                        <td class="border border-gray-500">{{ payment.booking_id }}</td>
+                        <td class="border border-gray-500">{{ payment.booking.user.get_username }}</td>
+                        <td class="border border-gray-500">{{ payment.amount }} บาท</td>
+                        <td class="border border-gray-500">
+                            {% if payment.payment_method == "cash" %}
+                            💵 เงินสด
+                            {% elif payment.payment_method == "credit_card" %}
+                            💳 บัตรเครดิต
+                            {% else %}
+                            🏦 โอนผ่านธนาคาร
+                            {% endif %}
+                        </td>
+                        <td class="border border-gray-500">
+                            {% if payment.status == "pending" %}
+                            <span class="status-pending">รอดำเนินการ</span>
+                            {% elif payment.status == "approved" %}
+                            <span class="status-approved">✅ อนุมัติแล้ว</span>
+                            {% else %}
+                            <span class="status-rejected">❌ ปฏิเสธ</span>
+                            {% endif %}
+                        </td>
+                        <td class="border border-gray-500">
+                            {% if payment.receipt %}
+                                <a href="{{ payment.receipt.url }}" target="_blank">
+                                    <img src="{{ payment.receipt.url }}" alt="สลิป" class="h-20 rounded shadow" />
+                                </a>
+                            {% else %}
+                                ไม่มีสลิป
+                            {% endif %}
+                        </td>
+                        
+                        <td class="border border-gray-500">
+                            {% if payment.status == "pending" %}
+                            <div class="flex justify-center space-x-2">
+                                <a href="{% url 'approve_payment' payment.payment_id %}" class="btn btn-approve">✅ อนุมัติ</a>
+                                <a href="{% url 'reject_payment' payment.payment_id %}" class="btn btn-reject">❌ ปฏิเสธ</a>
+                            </div>
+                            {% else %}
+                            <span class="text-gray-400">เสร็จสิ้น</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-red-400 py-4">ไม่มีข้อมูลการชำระเงิน</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{{ payment.receipt.url }}
+      
+</body>
+
+</html>

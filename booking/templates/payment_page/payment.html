@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 ชำระเงิน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .qr-container {
+            display: none;
+        }
+
+        .timer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* ตัวจับเวลา */
+        .countdown-box {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            display: inline-block;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        /* เอฟเฟกต์กระพริบ */
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex justify-center items-center min-h-screen">
+    <div class="container">
+        <h2 class="text-3xl font-bold text-green-400 text-center mb-4">⚽ ชำระเงิน</h2>
+
+        <!-- ตัวจับเวลานับถอยหลัง -->
+        <div class="timer">
+            ⏳ เหลือเวลา: <span id="countdown" class="countdown-box">10:00</span> นาที
+        </div>
+
+        {% if bookings %}
+        {% for booking in bookings%}
+        <div class="bg-green-900 p-4 rounded-lg border border-green-400 mb-4">
+            <h2>การชำระเงินสำหรับการจอง #{{ booking.booking_id }}</h2>
+            <p>สนามที่จอง: {{ booking.field.field_name }}</p>
+            <p>วันที่จอง: {{ booking.booking_date }}</p>
+            <p>เวลาเริ่ม: {{ booking.start_time }}</p>
+            <p>เวลาสิ้นสุด: {{ booking.end_time }}</p>
+            <p>ราคารวม: ฿{{ booking.total_price }}</p>
+                <h3 class="text-yellow-400">ยังไม่มีการชำระเงิน</h3>
+
+                <!-- ฟอร์มชำระเงิน -->
+                <form method="post" action="{% url 'payment' booking.booking_id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="booking_id" value="{{ booking.booking_id }}">
+
+                    <label class="block text-green-300 font-semibold">💳 เลือกวิธีการชำระเงิน:</label>
+                    <select id="payment-method" name="payment_method"
+                        class="w-full p-2 mt-1 bg-gray-800 text-white border border-green-400 rounded-lg focus:ring-2 focus:ring-green-400"
+                        required>
+                        <option value="" disabled selected>-- เลือกวิธีชำระเงิน --</option>
+                        <!-- <option value="cash">💵 เงินสด</option> -->
+                        <option value="bank_transfer">🏦 โอนผ่านธนาคาร</option>
+                    </select>
+
+                    <!-- แสดง QR Code เมื่อเลือก "โอนผ่านธนาคาร" -->
+                    <div id="qr-container" class="qr-container text-center mt-4">
+                        <h3 class="text-green-300 font-semibold mb-2">📌 สแกน QR Code เพื่อโอนเงิน</h3>
+                        <img src="/media/field_images/321.jpg" alt="QR Code สำหรับชำระเงิน"
+                            class="mx-auto w-40 h-40 rounded-lg shadow-lg">
+                    </div>
+
+                    <!-- อัปโหลดสลิปโอนเงิน -->
+                    <div id="bank-transfer-section" class="mt-3 hidden">
+                        <label class="block text-green-300 font-semibold">📄 อัปโหลดสลิปการโอน:</label>
+                        <input type="file" name="receipt"
+                            class="w-full p-2 mt-1 bg-gray-800 text-white border border-green-400 rounded-lg focus:ring-2 focus:ring-green-400"
+                            accept="image/*" required>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-green-500 hover:bg-green-700 text-white font-semibold py-2 px-4 mt-4 rounded-lg shadow">
+                        ✅ ยืนยันการชำระเงิน
+                    </button>
+                </form>
+        </div>
+        {% endfor %}
+{% else %}
+    <p class="text-center text-red-400">ไม่มีข้อมูลการจอง</p>
+{% endif %}
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const paymentMethod = document.getElementById("payment-method");
+            const qrContainer = document.getElementById("qr-container");
+            const bankTransferSection = document.getElementById("bank-transfer-section");
+            const countdownElement = document.getElementById("countdown");
+
+            // ตั้งเวลาเริ่มต้น (10 นาที = 600 วินาที)
+            let countdownTime = parseInt(sessionStorage.getItem("countdown")) || 600;
+            let countdownInterval;
+
+            function updateCountdown() {
+                let minutes = Math.floor(countdownTime / 60);
+                let seconds = countdownTime % 60;
+                countdownElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (countdownTime <= 0) {
+                    clearInterval(countdownInterval);
+                    alert("หมดเวลา! กรุณาทำการจองสนามใหม่");
+                    sessionStorage.removeItem("countdown");
+                    window.location.href = "{% url 'home' %}";
+                } else {
+                    sessionStorage.setItem("countdown", countdownTime);
+                    countdownTime--;
+                }
+            }
+
+            // เริ่มนับถอยหลัง
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+
+            // แสดง/ซ่อน QR Code และช่องอัปโหลดสลิปตามการเลือกวิธีชำระเงิน
+            paymentMethod.addEventListener("change", function () {
+                if (this.value === "bank_transfer") {
+                    qrContainer.style.display = "block";
+                    bankTransferSection.classList.remove("hidden");
+                } else {
+                    qrContainer.style.display = "none";
+                    bankTransferSection.classList.add("hidden");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

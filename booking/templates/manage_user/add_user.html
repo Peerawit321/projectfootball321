@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มผู้ใช้</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-auto th,
+        .table-auto td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">เพิ่มผู้ใช้ใหม่</h1>
+        <form method="POST" action="{% url 'add_user' %}" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="username" class="block text-gray-700 font-medium">ชื่อผู้ใช้</label>
+                <input type="text" id="username" name="username" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div>
+                <label for="email" class="block text-gray-700 font-medium">อีเมล</label>
+                <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div>
+                <label for="role" class="block text-gray-700 font-medium">บทบาท</label>
+                <select id="role" name="role" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    เพิ่มผู้ใช้
+                </button>
+                <a href="{% url 'manage_users' %}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                    ยกเลิก
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

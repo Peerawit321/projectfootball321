@@ -1,0 +1,58 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรไฟล์ของคุณ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg'); /* 🔹 เปลี่ยน URL ตามต้องการ */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="max-w-3xl w-full bg-white shadow-lg p-8 rounded-xl bg-opacity-90">
+
+           <!-- 🔹 ปุ่มกลับ -->
+           <div class="mb-5">
+            <a href="{% url 'home' %}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-gray-700 transition">
+                <i class="fas fa-arrow-left mr-2"></i> กลับไปหน้าหลัก
+            </a>
+        </div>
+        
+        <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-6">👤</h2>
+        
+        <div class="flex flex-col items-center p-6 bg-gray-50 rounded-lg shadow">
+
+            <!-- 🔹 ข้อมูลโปรไฟล์ -->
+            <div class="text-center space-y-2">
+                <p class="text-2xl font-semibold text-gray-900"><strong>ชื่อ:</strong> {{ user.username }}</p>
+                <p class="text-lg text-gray-700 italic"><strong>อีเมล:</strong> {{ user.email }}</p>
+            </div>
+            
+            <div class="mt-5 flex space-x-4">
+                <!-- 🔹 ปุ่มแก้ไขโปรไฟล์ -->
+                <a href="{% url 'edit_profile' %}" 
+                   class="px-6 py-3 bg-green-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 transition">
+                    <i class="fas fa-user-edit mr-2"></i> แก้ไขโปรไฟล์
+                </a>
+                
+                <!-- 🔹 ปุ่มเปลี่ยนรหัสผ่าน -->
+                <a href="{% url 'change_password' %}" 
+                   class="px-6 py-3 bg-red-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
+                    <i class="fas fa-key mr-2"></i> เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

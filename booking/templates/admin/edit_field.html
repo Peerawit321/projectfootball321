@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Field</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-auto th, .table-auto td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-10 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">แก้ไขข้อมูลสนาม</h1>
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="field_name" class="block text-gray-700 font-semibold">ชื่อสนาม:</label>
+                {{ form.field_name }}
+            </div>
+            <div>
+                <label for="price_weekday" class="block text-gray-700 font-semibold">ราคาในวันธรรมดา:</label>
+                {{ form.price_weekday }}
+            </div>
+            <div>
+                <label for="price_weekend" class="block text-gray-700 font-semibold">ราคาในวันหยุด:</label>
+                {{ form.price_weekend }}
+            </div>
+            <div>
+                <label for="image" class="block text-gray-700 font-semibold">รูปภาพสนาม:</label>
+                {{ form.image }}
+                {% if field.image %}
+                <img src="{{ field.image.url }}" alt="Current Image" class="mt-4 w-40 h-40 object-cover rounded-lg">
+                {% endif %}
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    บันทึกการเปลี่ยนแปลง
+                </button>
+                <a href="{% url 'home_admin' %}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">
+                    ยกเลิก
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

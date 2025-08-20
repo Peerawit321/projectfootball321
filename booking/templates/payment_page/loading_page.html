@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏳ กำลังดำเนินการ...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(to right, #4ade80, #10b981);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 450px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .spinner {
+            border: 6px solid rgba(0, 0, 0, 0.1);
+            border-top: 6px solid #10b981;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary {
+            background-color: #10b981;
+            color: white;
+            box-shadow: 0px 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #059669;
+            box-shadow: 0px 6px 15px rgba(16, 185, 129, 0.5);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800">⏳ กำลังดำเนินการ...</h1>
+        <p class="mt-2 text-gray-600">ระบบกำลังตรวจสอบข้อมูลของคุณ กรุณารอสักครู่...</p>
+
+        <!-- Spinner Loader -->
+        <div class="spinner"></div>
+
+        <!-- ปุ่มกลับหน้าหลัก -->
+        <a href="{% url 'home' %}" class="btn btn-primary">🏠 กลับหน้าหลัก</a>
+    </div>
+
+</body>
+
+</html>

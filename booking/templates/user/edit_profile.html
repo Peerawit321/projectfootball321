@@ -1,0 +1,35 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขโปรไฟล์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg'); /* 🔹 เปลี่ยน URL ตามต้องการ */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-lg w-full bg-white shadow-xl p-8 rounded-lg bg-opacity-90">
+        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-6">✏️ แก้ไขโปรไฟล์</h2>
+        
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div class="space-y-2">
+                {{ form.as_p }}
+            </div>
+            
+            <button type="submit" class="w-full px-4 py-3 bg-green-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-600 transition transform hover:scale-105">
+                บันทึกการเปลี่ยนแปลง
+            </button>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock %}

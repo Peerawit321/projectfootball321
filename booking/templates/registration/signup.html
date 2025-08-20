@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-900 bg-opacity-50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 text-center relative">
+        <h2 class="text-3xl font-extrabold text-green-700 mb-6">Sign Up</h2>
+        <form method="post" class="space-y-4 text-left">
+            {% csrf_token %}
+            <div class="space-y-2">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="w-full py-3 bg-green-700 text-white rounded-full text-lg font-semibold hover:bg-green-800 transition shadow-md">Sign Up</button>
+        </form>
+        <div class="mt-6 text-sm">
+            <p>Already have an account? <a href="/login" class="text-green-700 hover:underline font-semibold">Log In</a></p>
+        </div>
+        
+        <div class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 cursor-pointer">
+            <a href="/" class="text-xl">&times;</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appfootball - จองสนามฟุตบอล</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-500 text-gray-100 font-sans">
+
+  <!-- Hero Section with Parallax Effect -->
+  <div class="relative bg-cover bg-center h-screen" style="background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20240525/pngtree-artificial-grass-sport-field-cover-with-soccer-goal-image_15730619.jpg');">
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative z-10 flex flex-col justify-center items-center h-full text-white text-center">
+      <h1 class="text-4xl font-bold mb-4 animate-fade-in">ยินดีต้อนรับสู่ Jojo artificial grass football field</h1>
+      <p class="text-lg mb-6 animate-fade-in">จองสนามฟุตบอลระดับพรีเมียม ง่ายแค่ปลายนิ้ว</p>
+      <div class="animate-fade-in">
+        <a href="/login" class="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg text-lg mr-4 border-2 border-white">เข้าสู่ระบบ</a>
+        <a href="/signup" class="bg-white hover:bg-gray-100 text-green-500 py-2 px-6 rounded-lg text-lg border-2 border-green-500">สมัครสมาชิก</a>
+      </div>
+    </div>
+  </div>
+
+<!-- Features Section with Animated Parallax Background -->
+<div class="relative bg-fixed bg-cover bg-center py-12 parallax-section"
+     style="background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1-1024x679.jpg');">
+     
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+  <!-- Features Content -->
+  <div class="relative z-10 text-center text-white">
+    <h2 class="text-2xl font-semibold mb-8 border-b-4 border-green-500 inline-block">จุดเด่นของเรา</h2>
+    <div class="flex justify-center flex-wrap gap-8">
+      <div class="w-64 border border-gray-300 rounded-lg p-4 shadow-lg bg-white animate-fadeInUp">
+        <img src="https://s3gw.inet.co.th:8082/smegp-image-1/prod/V1/230820215107041.jpg" alt="สนามหญ้าคุณภาพสูง" class="w-full rounded-lg">
+        <p class="mt-4 text-gray-800">สนามหญ้าคุณภาพสูง</p>
+      </div>
+      <div class="w-64 border border-gray-300 rounded-lg p-4 shadow-lg bg-white animate-fadeInUp delay-200">
+        <img src="https://i.ytimg.com/vi/2qUY9Ww2JOc/hqdefault.jpg" alt="ระบบไฟ LED" class="w-full rounded-lg">
+        <p class="mt-4 text-gray-800">ระบบไฟ LED สว่าง</p>
+      </div>
+      <div class="w-64 border border-gray-300 rounded-lg p-4 shadow-lg bg-white animate-fadeInUp delay-400">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhs9rdDWV7WTjZCECp3irqmbJU7TaWWX_R_AT3QtpAvJ5-VQZdMLAcAO9kqtSJo6wqeTTq9Q_UInookK0JnXhqDc-m6NdXrj46KojdExtsrjWkiEWCz5_IOrgSzLhSUO5HPQl4ZlULHWO0Z/s1600/S__3506214.jpg" alt="ที่จอดรถ" class="w-full rounded-lg">
+        <p class="mt-4 text-gray-800">ที่จอดรถสะดวก</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSS -->
+<style>
+  /* Parallax Scrolling Animation */
+  .parallax-section {
+    background-attachment: fixed;
+    animation: parallaxScroll 10s infinite linear;
+  }
+
+  /* Keyframes for smooth movement */
+  @keyframes parallaxScroll {
+    0% {
+      background-position: center top;
+    }
+    50% {
+      background-position: center center;
+    }
+    100% {
+      background-position: center top;
+    }
+  }
+
+  /* Fade In Up Animation */
+  .animate-fadeInUp {
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+  <script>
+    // Tailwind animation classes
+    document.querySelectorAll('.animate-fade-in').forEach(el => {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        el.style.transition = 'opacity 1s ease-in-out, transform 1s ease-in-out';
+        el.style.opacity = 1;
+        el.style.transform = 'translateY(0)';
+      }, 300);
+    });
+  </script>
+</body>
+</html>
+
+  <!-- Testimonials Section with Parallax Background -->
+<div class="relative bg-fixed bg-cover bg-center py-12" 
+style="background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20240525/pngtree-artificial-grass-sport-field-cover-with-soccer-goal-image_15730619.jpg');">
+<!-- Overlay -->
+<div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+<!-- Testimonials Content -->
+<div class="relative z-10 text-center text-white">
+<h2 class="text-2xl font-semibold mb-8 border-b-4 border-green-500 inline-block">เสียงจากลูกค้า</h2>
+<div class="flex justify-center flex-wrap gap-8">
+ <!-- Testimonial 1 -->
+ <div class="w-64 bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+   <p class="italic text-gray-800">"สนามดีมาก เล่นสนุก จองง่าย!"</p>
+   <div class="mt-4 text-yellow-400">
+     ⭐⭐⭐⭐⭐
+   </div>
+   <small class="block mt-2 text-gray-600">- คุณ Jojo</small>
+ </div>
+ <!-- Testimonial 2 -->
+ <div class="w-64 bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+   <p class="italic text-gray-800">"ประทับใจบริการ เป็นกันเองสุดๆ"</p>
+   <div class="mt-4 text-yellow-400">
+     ⭐⭐⭐⭐⭐
+   </div>
+   <small class="block mt-2 text-gray-600">- คุณวิภา</small>
+ </div>
+ <!-- Testimonial 3 -->
+ <div class="w-64 bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+   <p class="italic text-gray-800">"จองสะดวกมาก สนามสะอาด"</p>
+   <div class="mt-4 text-yellow-400">
+     ⭐⭐⭐⭐⭐
+   </div>
+   <small class="block mt-2 text-gray-600">- คุณก้อง</small>
+ </div>
+ <!-- Testimonial 4 -->
+ <div class="w-64 bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+   <p class="italic text-gray-800">"ราคาคุ้มค่า บริการดีเยี่ยม"</p>
+   <div class="mt-4 text-yellow-400">
+     ⭐⭐⭐⭐⭐
+   </div>
+   <small class="block mt-2 text-gray-600">- คุณเมย์</small>
+ </div>
+ <!-- Testimonial 5 -->
+ <div class="w-64 bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+   <p class="italic text-gray-800">"สนามใหญ่ สบาย บรรยากาศดี"</p>
+   <div class="mt-4 text-yellow-400">
+     ⭐⭐⭐⭐⭐
+   </div>
+   <small class="block mt-2 text-gray-600">- คุณนนท์</small>
+ </div>
+ <!-- Testimonial 6 -->
+ <div class="w-64 bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+   <p class="italic text-gray-800">"ชอบมากครับ เล่นได้ทั้งวัน"</p>
+   <div class="mt-4 text-yellow-400">
+     ⭐⭐⭐⭐⭐
+   </div>
+   <small class="block mt-2 text-gray-600">- คุณต้น</small>
+ </div>
+</div>
+</div>
+</div>
+

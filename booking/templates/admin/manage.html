@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการผู้ใช้</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-auto th,
+        .table-auto td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="content-container">
+
+        <!-- เมนูนำทาง -->
+        <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+            <div class="w-10 h-10 bg-gray-800 rounded-full mr-4"></div>
+            <div class="flex-grow text-center">
+                <a href="{% url 'home_admin' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+                    <a href="{% url 'booking_admin' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+                    <!-- <a href="{% url 'Check_field_status' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">สถานะสนาม</a> -->
+                    <a href="{% url 'manage_users' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">จัดการผู้ใช้</a>
+                    <a href="{% url 'admin_confirm' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ยืนยันการชำระเงิน</a>
+                    <a href="{% url 'logout' %}" class="text-white mx-2 font-bold hover:underline border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>
+            </div>
+        </div>
+
+        <div class="container mx-auto bg-white p-6 rounded-lg shadow-md">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Manage Users</h1>
+        <a href="{% url 'add_user' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">เพิ่มผู้ใช้</a>
+    </div>
+
+    <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+        <tr class="bg-green-500 text-white">
+            <th class="border border-gray-300 px-4 py-2">User ID</th>
+            <th class="border border-gray-300 px-4 py-2">Username</th>
+            <th class="border border-gray-300 px-4 py-2">Email</th>
+            <th class="border border-gray-300 px-4 py-2">Role</th>
+            <th class="border border-gray-300 px-4 py-2">Actions</th> 
+    </thead>
+        <tbody>
+            <tbody>
+    {% for usere in usertest %}
+    <tr class="text-center bg-gray-50 hover:bg-gray-100">
+        <td class="border border-gray-300 px-4 py-2">{{ usere.id }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ usere.username }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ usere.email }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ usere.role }}</td>
+        <td class="border border-gray-300 px-4 py-2">
+            <form action="{% url 'delete_user' usere.id %}" method="post" onsubmit="return confirm('ยืนยันลบผู้ใช้?');">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">ลบ</button>
+              </form>
+          </td>
+      </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

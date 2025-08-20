@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ติดต่อเรา - ระบบจองสนามฟุตบอล</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        #map {
+            height: 180px;
+        }
+    </style>
+
+</head>
+
+<body class="font-sans">
+
+    <style>
+        /* เพิ่มภาพพื้นหลังสำหรับทั้งหน้า */
+        body {
+            background-image: url('https://wipelectric.com/wp-content/uploads/2021/06/Ref-Trinoi1.jpg');
+            /* ลิงก์ไปยังภาพพื้นหลัง */
+            background-size: cover;
+            /* ทำให้ภาพขยายครอบคลุมพื้นที่ทั้งหมด */
+            background-position: center;
+            /* วางภาพตรงกลาง */
+            background-repeat: no-repeat;
+            /* ไม่ทำซ้ำภาพ */
+            height: 100%;
+            /* ครอบคลุมความสูงของเนื้อหา */
+            min-height: 100vh;
+            /* ครอบคลุมความสูงของหน้าจอ */
+            margin: 0;
+            /* ตัดขอบว่าง */
+            padding: 0;
+            /* ตัดขอบว่าง */
+        }
+
+        /* เพิ่มความโปร่งแสงให้กับส่วนเนื้อหา */
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* พื้นหลังโปร่งแสง */
+            border-radius: 10px;
+            /* มุมโค้งมน */
+            padding: 20px;
+            /* ระยะห่างภายใน */
+            margin: 20px auto;
+            /* จัดให้อยู่ตรงกลาง */
+            width: 90%;
+            /* กำหนดความกว้าง */
+            max-width: 1200px;
+            /* จำกัดความกว้างสูงสุด */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* เพิ่มเงา */
+
+        }
+    </style>
+
+<div class="content-container">
+    <div class="flex items-center bg-gray-800 p-4 rounded-lg mb-5">
+        <div class="flex-grow text-center">
+            <a href="{% url 'profile_view' %}"
+                class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ตั้งค่า</a>
+            <a href="{% url 'home' %}"
+                class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">หน้าหลัก</a>
+            <a href="{% url 'about' %}"
+                class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">เกี่ยวกับสนาม</a>
+            <a href="{% url 'bookings' %}"
+                class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ดูรายการจอง</a>
+            <a href="{% url 'contact' %}"
+                class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ติดต่อเรา</a>
+            <a href="{% url 'logout' %}"
+                class="text-white mx-4 font-bold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600">ออกจากระบบ</a>  
+        </div>
+    </div>
+
+        <!-- ส่วนแสดงสนาม -->
+        <div class="max-w-5xl mx-auto bg-white p-10 mt-10 shadow-lg rounded-lg">
+            <h2 class="text-2xl text-green-600 mb-4">ติดต่อตามข้อมูลด้านล่าง</h2>
+            <div class="text-center my-6">
+                <div id="map"></div>
+            </div>
+            <p class="text-lg">ติดต่อตรงนี้:</p>
+            <p class="mt-2 text-lg"><i class="fab fa-facebook"></i> โจโจ้สนามฟุตบอลหญ้าเทียม</p>
+            <p class="mt-2 text-lg"><i class="fab fa-line"></i> ID โจโจ้สนามฟุตบอลหญ้าเทียม 554</p>
+            <p class="mt-2 text-lg"><i class="fas fa-phone"></i> เบอร์โทร 098 291 6595</p>
+        </div>
+
+        <script>
+            var map = L.map('map').setView([15.274076304386776, 104.87791228156136], 13);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            L.marker([15.274076304386776, 104.87791228156136]).addTo(map);
+        </script>
+</body>
+
+</html>
